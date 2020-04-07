@@ -42,10 +42,16 @@
             dataType: "text",
             success: function(data) {
                 var data = $.csv.toArrays(data);
+                var applyJumpCorrection = true;
 
                 tableData = [];
 
                 for (var i = 1, len = data.length; i < len; i++) {
+
+                    var country = data[i][0];
+                    var confirmed = data[i][2];
+                    var death = data[i][3];
+                    var deltaConfirmed = data[i][6];
 
                     var parsed_date = data[i][1].split('/');
 
@@ -59,12 +65,28 @@
                     if (year.length<2) year = '0'+year;
                     year = '20'+year;
 
+                    // Fix innacurate jumps in source dataset
+                    if ( applyJumpCorrection && deltaConfirmed==25646 && year==2020 && month==4 && day==4)
+                    {
+                        if (deltaConfirmed == 25646)
+                            deltaConfirmed -= (25646 - 4267);
+                        else
+                            applyJumpCorrection = false;
+                    }
+
+                    if  (applyJumpCorrection &&
+                         ((parseInt(year)>2020) ||
+                          (parseInt(year)==2020 && parseInt(month)>4) ||
+                          (parseInt(year)==2020 && parseInt(month)==4 && parseInt(day)>=4))
+                        )
+                        confirmed -= (90848 - 68605);
+
                     tableData.push({
-                        "country":          data[i][0],
+                        "country":          country,
                         "date":             day +'/'+ month +'/'+ year,
-                        "confirmed":        data[i][2],
-                        "death":            data[i][3],
-                        "deltaconfirmed":   data[i][6]
+                        "confirmed":        confirmed,
+                        "death":            death,
+                        "deltaconfirmed":   deltaConfirmed
                     });
                 }
 
