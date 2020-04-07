@@ -65,8 +65,8 @@
                     if (year.length<2) year = '0'+year;
                     year = '20'+year;
 
-                    // Fix innacurate jumps in source dataset
-                    if ( applyJumpCorrection && deltaConfirmed==25646 && year==2020 && month==4 && day==4)
+                    // Fix innacurate jumps in source dataset for France
+                    if ( applyJumpCorrection && country=='France' && year==2020 && month==4 && day==4)
                     {
                         if (deltaConfirmed == 25646)
                             deltaConfirmed -= (25646 - 4267);
@@ -74,7 +74,7 @@
                             applyJumpCorrection = false;
                     }
 
-                    if  (applyJumpCorrection &&
+                    if  (applyJumpCorrection && country=='France' &&
                          ((parseInt(year)>2020) ||
                           (parseInt(year)==2020 && parseInt(month)>4) ||
                           (parseInt(year)==2020 && parseInt(month)==4 && parseInt(day)>=4))
