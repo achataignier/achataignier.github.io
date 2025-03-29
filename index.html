@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sentence Bienveillante du Jour</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            text-align: center;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+        }
+        p {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>sentence Bienveillante du Jour</h1>
+        <p id="sentence">Chargement...</p>
+    </div>
+
+    <script>
+        fetch('sentences.json')
+            .then(response => response.json())
+            .then(sentences => {
+                const index = new Date().getDate() % sentences.length;
+                document.getElementById("sentence").textContent = sentences[index];
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement des sentences:', error);
+                document.getElementById("sentence").textContent = "Impossible de charger la sentence du jour.";
+            });
+    </script>
+</body>
+</html>
